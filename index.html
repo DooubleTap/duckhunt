@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Menz Agitat">
+    <meta name="description" content="Duck Hunt - Modern Gaming Shop">
+    <title>Duck Hunt - Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1a1a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #333;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: #888;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .shop-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .shop-item {
+            background: #2a2a2a;
+            border: 1px solid #404040;
+            padding: 1rem 1.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .shop-item:first-child {
+            border-radius: 4px 4px 0 0;
+        }
+
+        .shop-item:last-child {
+            border-radius: 0 0 4px 4px;
+        }
+
+        .shop-item:hover {
+            background: #333;
+            border-color: #555;
+        }
+
+        .item-id {
+            background: #404040;
+            color: #e0e0e0;
+            width: 40px;
+            height: 30px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            border: 1px solid #555;
+        }
+
+        .item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .item-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .item-description {
+            color: #b0b0b0;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .xp-cost {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            border: 1px solid #555;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .xp-label {
+            font-size: 0.7rem;
+            color: #888;
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            color: #666;
+            font-size: 0.8rem;
+            border-top: 1px solid #333;
+        }
+
+        /* Alternating row colors for better readability */
+        .shop-item:nth-child(even) {
+            background: #252525;
+        }
+
+        .shop-item:nth-child(even):hover {
+            background: #2e2e2e;
+        }
+
+        /* Category-specific styling (subtle) */
+        .shop-item[data-type="ammo"] .item-id {
+            background: #3d2f2a;
+            border-color: #5d4f4a;
+        }
+
+        .shop-item[data-type="equipment"] .item-id {
+            background: #2a2f3d;
+            border-color: #4a4f5d;
+        }
+
+        .shop-item[data-type="consumable"] .item-id {
+            background: #2a3d2f;
+            border-color: #4a5d4f;
+        }
+
+        .shop-item[data-type="insurance"] .item-id {
+            background: #3d352a;
+            border-color: #5d554a;
+        }
+
+        .shop-item[data-type="utility"] .item-id {
+            background: #353d3d;
+            border-color: #555d5d;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .shop-item {
+                padding: 0.8rem 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .item-content {
+                width: 100%;
+            }
+
+            .xp-cost {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Duck Hunt Shop</h1>
+            <div class="subtitle">Equipment & Supplies Inventory</div>
+        </header>
+
+        <div class="shop-list">
+            <div class="shop-item" data-type="ammo">
+                <div class="item-id">1</div>
+                <div class="item-content">
+                    <div class="item-name">Extra Bullet</div>
+                    <div class="item-description">One bullet is added directly in the gun chamber.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    7
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="ammo">
+                <div class="item-id">2</div>
+                <div class="item-content">
+                    <div class="item-name">Extra Clip</div>
+                    <div class="item-description">One clip is added to your stock.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    20
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="ammo">
+                <div class="item-id">3</div>
+                <div class="item-content">
+                    <div class="item-name">AP Ammo (Antiblindage)</div>
+                    <div class="item-description">Damage x2 for 24h. Helps killing golden ducks.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    15
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="ammo">
+                <div class="item-id">4</div>
+                <div class="item-content">
+                    <div class="item-name">Explosive Ammo</div>
+                    <div class="item-description">Damage x3 for 24h. Helps killing golden ducks.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    25
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">5</div>
+                <div class="item-content">
+                    <div class="item-name">Repurchase Confiscated Gun</div>
+                    <div class="item-description">Allows you to get your gun back without having to wait.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    40
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="consumable">
+                <div class="item-id">6</div>
+                <div class="item-content">
+                    <div class="item-name">Grease</div>
+                    <div class="item-description">Reduces the odds of jamming by 50% for 24h and protects from sand once.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    8
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="equipment">
+                <div class="item-id">7</div>
+                <div class="item-content">
+                    <div class="item-name">Sight</div>
+                    <div class="item-description">Improves accuracy for the next shot by (100 - current accuracy) / 3.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    6
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="equipment">
+                <div class="item-id">8</div>
+                <div class="item-content">
+                    <div class="item-name">Infrared Detector</div>
+                    <div class="item-description">Locks the trigger when there is no duck on sight, thus helping you to save bullets. Works for 24h, blocks 6 times.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    15
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="equipment">
+                <div class="item-id">9</div>
+                <div class="item-content">
+                    <div class="item-name">Silencer</div>
+                    <div class="item-description">Muffles most of the noise from your gun for 24h so ducks don't get frightened and escape.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    5
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="consumable">
+                <div class="item-id">10</div>
+                <div class="item-content">
+                    <div class="item-name">Four-leaf Clover</div>
+                    <div class="item-description">Win a random XP bonus for each duck you shoot for 24h. Bonus can be from 1 to 10 and is determined at purchase.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    13
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="equipment">
+                <div class="item-id">11</div>
+                <div class="item-content">
+                    <div class="item-name">Sunglasses</div>
+                    <div class="item-description">Protects from mirror induced glares for 24h.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    5
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">12</div>
+                <div class="item-content">
+                    <div class="item-name">Spare Clothes</div>
+                    <div class="item-description">Dry set of clothes. Useful when someone poured a bucket of water on you.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    7
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">13</div>
+                <div class="item-content">
+                    <div class="item-name">Brush for Gun</div>
+                    <div class="item-description">Cancels the sabotage and removes sand from your gun.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    7
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">14</div>
+                <div class="item-content">
+                    <div class="item-name">Mirror</div>
+                    <div class="item-description">Dazzles another player of your choice and make him lose 50% of his accuracy for his next shot.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    7
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">15</div>
+                <div class="item-content">
+                    <div class="item-name">Handful of Sand</div>
+                    <div class="item-description">Throw sand on the gun of another player of your choice, his jamming odds will increase by 50% for the next shot. Cancels effects from the grease.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    7
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">16</div>
+                <div class="item-content">
+                    <div class="item-name">Water Bucket</div>
+                    <div class="item-description">Throw a bucket of water on the hunter of your choice, forcing him to wait 1h for his clothes to dry before he can hunt again.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    10
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">17</div>
+                <div class="item-content">
+                    <div class="item-name">Sabotage</div>
+                    <div class="item-description">Sabotage the weapon of another player. His weapon will jam and explode at his face the next time he press the trigger.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    14
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="insurance">
+                <div class="item-id">18</div>
+                <div class="item-content">
+                    <div class="item-name">Life Insurance</div>
+                    <div class="item-description">Single use insurance policy allowing you to gain a bonus worth 2x the hunter level if you are the victim of a hunting accident for one week.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    10
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="insurance">
+                <div class="item-id">19</div>
+                <div class="item-content">
+                    <div class="item-name">Liability Insurance</div>
+                    <div class="item-description">Divides the XP penalty for hunting accidents by 3 for two days.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    5
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">20</div>
+                <div class="item-content">
+                    <div class="item-name">Decoy</div>
+                    <div class="item-description">Attracts a duck in the next 10 minutes.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    8
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="consumable">
+                <div class="item-id">21</div>
+                <div class="item-content">
+                    <div class="item-name">Piece of Bread</div>
+                    <div class="item-description">Throw pieces of bread to improve the probability of seeing ducks for 1h. Bread also makes ducks stay 20 seconds longer. Multiple pieces of bread can be bought to cumulate the effects.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    2
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="equipment">
+                <div class="item-id">22</div>
+                <div class="item-content">
+                    <div class="item-name">Ducks Detector</div>
+                    <div class="item-description">Single use device allowing a hunter to be warned by a notice when the next duck soars.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    5
+                </div>
+            </div>
+
+            <div class="shop-item" data-type="utility">
+                <div class="item-id">23</div>
+                <div class="item-content">
+                    <div class="item-name">Mechanical Duck</div>
+                    <div class="item-description">Make a prank to other hunters by launching a fake duck. They will not gain any XP from it and lose their ammo. The duck will be automatically launched 10 minutes after you buy it.</div>
+                </div>
+                <div class="xp-cost">
+                    <span class="xp-label">XP</span>
+                    50
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            Duck Hunt v2.11 • ©2015-2016 Menz Agitat
+        </footer>
+    </div>
+</body>
+</html>
