@@ -1,497 +1,663 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Menz Agitat">
-    <meta name="description" content="Duck Hunt - Modern Gaming Shop">
-    <title>Duck Hunt - Shop</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Menz Agitat">
+<meta name="description" content="Duck Hunt IRC — boutique / shop. Joue sur #canada (Undernet).">
+<meta name="theme-color" content="#0b1a2e">
+<title>Duck Hunt Shop</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23ff7a1a' stroke-width='2.5'/%3E%3Cpath d='M16 2v8M16 22v8M2 16h8M22 16h8' stroke='%23ff7a1a' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ff7a1a'/%3E%3C/svg%3E">
+<style>
+:root {
+  --ink: #eef2ea;
+  --muted: #9fb0a6;
+  --faint: #6c7d74;
+  --panel: rgba(7, 14, 12, 0.6);
+  --line: rgba(255, 255, 255, 0.07);
+  --orange: #ff7a1a;
+  --green: #7ed957;
+  --blue: #4cc3ff;
+  --red: #ff5236;
+  --khaki: #d6c79a;
+  --steel: #a9c2d6;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", monospace;
+  --title: "Bahnschrift", "DIN Condensed", "Arial Narrow", Impact, sans-serif;
+  --crosshair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23ff7a1a' stroke-width='2'/%3E%3Cpath d='M16 3v7M16 22v7M3 16h7M22 16h7' stroke='%23ff7a1a' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%23ff7a1a'/%3E%3C/svg%3E") 16 16, crosshair;
+}
 
-        body {
-            background: #1a1a1a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #e0e0e0;
-            min-height: 100vh;
-            line-height: 1.4;
-        }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+html, body { height: 100%; }
 
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #333;
-        }
+body {
+  background: #0b1a2e;
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  line-height: 1.35;
+  overflow: hidden;
+}
 
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
-        }
+a { color: inherit; }
 
-        .header .subtitle {
-            font-size: 0.9rem;
-            color: #888;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+/* ---------- Background scene ---------- */
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  display: block;
+}
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(2, 6, 8, 0.5) 100%);
+  pointer-events: none;
+}
+.mist { animation: drift 60s ease-in-out infinite alternate; }
+@keyframes drift { from { transform: translateX(-60px); } to { transform: translateX(60px); } }
+.flock { animation: fly linear infinite; }
+@keyframes fly { from { transform: translate(-260px, 0); } to { transform: translate(1900px, -90px); } }
 
-        .shop-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-        }
+/* ---------- Layout ---------- */
+.wrap {
+  height: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(10px, 2.2vh, 26px) 16px clamp(8px, 1.4vh, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 14px);
+  justify-content: center;
+}
 
-        .shop-item {
-            background: #2a2a2a;
-            border: 1px solid #404040;
-            padding: 1rem 1.5rem;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand svg { width: clamp(40px, 6vh, 56px); height: auto; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(255, 122, 26, 0.45)); }
+h1 {
+  font-family: var(--title);
+  font-weight: 700;
+  font-size: clamp(28px, 5.2vh, 46px);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 122, 26, 0.35);
+}
+h1 span { color: var(--orange); }
+.tagline { color: var(--muted); font-size: clamp(12px, 1.6vh, 14px); margin-top: 4px; }
+.tagline code {
+  font-family: var(--mono);
+  color: var(--orange);
+  background: rgba(255, 122, 26, 0.12);
+  border: 1px solid rgba(255, 122, 26, 0.3);
+  padding: 0 6px;
+  border-radius: 4px;
+}
 
-        .shop-item:first-child {
-            border-radius: 4px 4px 0 0;
-        }
+.actions { display: flex; align-items: center; gap: 10px; }
+.btn-canada {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #d62718, #ff5236);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 6px 20px rgba(214, 39, 24, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-canada:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25) inset, 0 8px 26px rgba(255, 82, 54, 0.5); }
+.btn-canada svg { width: 16px; height: 16px; }
+.btn-canada small { font-weight: 400; opacity: 0.85; }
 
-        .shop-item:last-child {
-            border-radius: 0 0 4px 4px;
-        }
+.lang {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 999px;
+  padding: 3px;
+}
+.lang button {
+  font: 600 12px var(--mono);
+  color: var(--muted);
+  background: none;
+  border: 0;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--orange); color: #1a0b00; }
 
-        .shop-item:hover {
-            background: #333;
-            border-color: #555;
-        }
+/* ---------- Shop board ---------- */
+.board {
+  flex: 0 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  backdrop-filter: blur(6px) saturate(1.15);
+  -webkit-backdrop-filter: blur(6px) saturate(1.15);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: clamp(6px, 1vh, 10px) 14px;
+  border-bottom: 1px solid var(--line);
+}
+.filters .hint { margin-left: auto; color: var(--faint); font-size: 12px; }
+.chip {
+  font: 600 11px/1 "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
+  padding: 5px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.chip:hover { background: color-mix(in srgb, var(--c) 22%, transparent); }
+.chip[aria-pressed="true"] { background: var(--c); color: #0a0f0c; }
+.chip.all { --c: var(--ink); }
 
-        .item-id {
-            background: #404040;
-            color: #e0e0e0;
-            width: 40px;
-            height: 30px;
-            border-radius: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-            border: 1px solid #555;
-        }
+.scroll { flex: 1; min-height: 0; overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: clamp(11px, 1.55vh, 14px); line-height: 1.3; }
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgba(10, 18, 16, 0.96);
+  color: var(--faint);
+  font: 600 11px "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line);
+}
+/* 23 rows share whatever height is left after header, filters and footer */
+td { padding: clamp(1px, calc((100vh - 250px) / 46 - 0.65em - 1px), 7px) 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: middle; }
+tbody tr { cursor: var(--crosshair); transition: background 0.12s ease; }
+tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.022); }
+tbody tr:hover { background: linear-gradient(90deg, color-mix(in srgb, var(--c) 18%, transparent), transparent 70%); }
+tbody tr:hover .num { color: #0a0f0c; background: var(--c); }
+tbody tr.hidden { display: none; }
 
-        .item-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-        }
+.num {
+  font: 700 0.85em var(--mono);
+  width: 2.4em;
+  height: 1.55em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  color: var(--c);
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  background: color-mix(in srgb, var(--c) 8%, transparent);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.name { font-weight: 600; white-space: nowrap; }
+.cat {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c);
+  white-space: nowrap;
+}
+.desc { color: #c4cec8; }
+.dur { font-family: var(--mono); font-size: 0.92em; color: var(--muted); white-space: nowrap; }
+.xp { text-align: right; white-space: nowrap; font: 700 1.05em var(--mono); color: var(--orange); }
+.xp small { font-size: 0.7em; color: var(--faint); margin-left: 2px; font-weight: 600; }
+th.r { text-align: right; }
 
-        .item-name {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin: 0;
-        }
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 18px;
+  color: var(--faint);
+  font-size: 12px;
+}
+footer nav { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+footer a { color: var(--muted); text-decoration: none; border-bottom: 1px dotted rgba(255, 255, 255, 0.2); }
+footer a:hover { color: var(--orange); border-color: var(--orange); }
 
-        .item-description {
-            color: #b0b0b0;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  background: #111a16;
+  border: 1px solid rgba(255, 122, 26, 0.5);
+  color: var(--ink);
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.toast code { font-family: var(--mono); color: var(--orange); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-        .xp-cost {
-            background: #1a1a1a;
-            color: #e0e0e0;
-            padding: 0.4rem 0.8rem;
-            border-radius: 3px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            border: 1px solid #555;
-            text-align: center;
-            min-width: 60px;
-        }
+/* ---------- Small screens: let the page scroll ---------- */
+@media (max-width: 820px), (max-height: 560px) {
+  body { overflow: auto; }
+  .wrap { height: auto; min-height: 100%; }
+  .board { flex: none; }
+  .scroll { overflow: visible; }
+  thead th { position: static; }
+}
+@media (max-width: 820px) {
+  .actions { width: 100%; justify-content: space-between; }
+  thead, td.c-cat, .filters .hint { display: none; }
+  table, tbody { display: block; }
+  tbody tr { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 6px 0; }
+  tbody tr.hidden { display: none; }
+  td { border: 0; padding: 1px 10px; }
+  td.c-num { grid-row: span 3; align-self: start; padding-top: 3px; }
+  td.c-name { grid-column: 2; white-space: normal; }
+  td.c-xp { grid-column: 3; grid-row: 1; }
+  td.c-desc { grid-column: 2 / span 2; }
+  td.c-dur { grid-column: 2 / span 2; font-size: 0.85em; }
+  td.c-dur:empty { display: none; }
+}
 
-        .xp-label {
-            font-size: 0.7rem;
-            color: #888;
-            display: block;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 1.5rem;
-            color: #666;
-            font-size: 0.8rem;
-            border-top: 1px solid #333;
-        }
-
-        /* Alternating row colors for better readability */
-        .shop-item:nth-child(even) {
-            background: #252525;
-        }
-
-        .shop-item:nth-child(even):hover {
-            background: #2e2e2e;
-        }
-
-        /* Category-specific styling (subtle) */
-        .shop-item[data-type="ammo"] .item-id {
-            background: #3d2f2a;
-            border-color: #5d4f4a;
-        }
-
-        .shop-item[data-type="equipment"] .item-id {
-            background: #2a2f3d;
-            border-color: #4a4f5d;
-        }
-
-        .shop-item[data-type="consumable"] .item-id {
-            background: #2a3d2f;
-            border-color: #4a5d4f;
-        }
-
-        .shop-item[data-type="insurance"] .item-id {
-            background: #3d352a;
-            border-color: #5d554a;
-        }
-
-        .shop-item[data-type="utility"] .item-id {
-            background: #353d3d;
-            border-color: #555d5d;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .shop-item {
-                padding: 0.8rem 1rem;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .item-content {
-                width: 100%;
-            }
-
-            .xp-cost {
-                align-self: flex-end;
-            }
-        }
-    </style>
+@media (prefers-reduced-motion: reduce) {
+  .mist, .flock { animation: none; }
+  .flock { display: none; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>Duck Hunt Shop</h1>
-            <div class="subtitle">Duckhunt is played on many IRC Channel, this is the shop for most of them. <br>Use !shop <#> in the channel to buy an item</number></div>
-        </header>
 
-        <div class="shop-list">
-            <div class="shop-item" data-type="ammo">
-                <div class="item-id">1</div>
-                <div class="item-content">
-                    <div class="item-name">Extra Bullet</div>
-                    <div class="item-description">One bullet is added directly in the gun chamber.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    7
-                </div>
-            </div>
+<!-- Dawn over a forest valley, drawn in-page (no external images) -->
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="0.32" stop-color="#173353"/>
+      <stop offset="0.52" stop-color="#5a4f6a"/>
+      <stop offset="0.62" stop-color="#c8643a"/>
+      <stop offset="0.7" stop-color="#f2a65a"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff3d6"/>
+      <stop offset="0.12" stop-color="#ffd38a"/>
+      <stop offset="0.35" stop-color="#ff9a4a" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff7a1a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="peaks" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d5372"/>
+      <stop offset="1" stop-color="#6b5e72"/>
+    </linearGradient>
+    <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6b06a"/>
+      <stop offset="0.35" stop-color="#b8603e"/>
+      <stop offset="1" stop-color="#1c2c40"/>
+    </linearGradient>
+    <linearGradient id="fog" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe2c4" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffe2c4" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffe2c4" stop-opacity="0"/>
+    </linearGradient>
+    <symbol id="duck" viewBox="-22 -24 52 32" overflow="visible">
+      <path d="M-13 -1 L-21 -4 L-19 1 L-13 2 Z"/>
+      <ellipse cx="0" cy="0" rx="14" ry="5"/>
+      <path d="M9 -2 Q14 -6 17 -6 L19 -4 Q14 -2 11 2 Z"/>
+      <circle cx="19" cy="-6" r="3.6"/>
+      <path d="M22 -6.6 L28 -5.2 L22 -4 Z"/>
+      <path d="M-3 -2 Q3 -18 11 -22 Q7 -9 7 -2 Z">
+        <animate attributeName="d" dur="0.42s" repeatCount="indefinite"
+          values="M-3 -2 Q3 -18 11 -22 Q7 -9 7 -2 Z;M-3 0 Q2 10 9 14 Q6 4 7 0 Z;M-3 -2 Q3 -18 11 -22 Q7 -9 7 -2 Z"/>
+      </path>
+    </symbol>
+  </defs>
 
-            <div class="shop-item" data-type="ammo">
-                <div class="item-id">2</div>
-                <div class="item-content">
-                    <div class="item-name">Extra Clip</div>
-                    <div class="item-description">One clip is added to your stock.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    20
-                </div>
-            </div>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <g id="stars" fill="#fff"></g>
+  <circle cx="800" cy="470" r="230" fill="url(#sun)"/>
+  <circle cx="800" cy="470" r="34" fill="#fff1cf"/>
 
-            <div class="shop-item" data-type="ammo">
-                <div class="item-id">3</div>
-                <div class="item-content">
-                    <div class="item-name">AP Ammo (Antiblindage)</div>
-                    <div class="item-description">Damage x2 for 24h. Helps killing golden ducks.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    15
-                </div>
-            </div>
+  <g class="flock" style="animation-duration:46s;animation-delay:-16s" fill="#0d1414" opacity="0.85">
+    <use href="#duck" x="0" y="110" width="52" height="32"/>
+    <use href="#duck" x="-48" y="88" width="44" height="27"/>
+    <use href="#duck" x="-48" y="134" width="44" height="27"/>
+    <use href="#duck" x="-92" y="68" width="38" height="23"/>
+    <use href="#duck" x="-92" y="156" width="38" height="23"/>
+  </g>
+  <g class="flock" style="animation-duration:70s;animation-delay:-38s" fill="#141c1e" opacity="0.6">
+    <use href="#duck" x="0" y="170" width="34" height="21"/>
+    <use href="#duck" x="-34" y="156" width="30" height="18"/>
+    <use href="#duck" x="-34" y="186" width="30" height="18"/>
+  </g>
 
-            <div class="shop-item" data-type="ammo">
-                <div class="item-id">4</div>
-                <div class="item-content">
-                    <div class="item-name">Explosive Ammo</div>
-                    <div class="item-description">Damage x3 for 24h. Helps killing golden ducks.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    25
-                </div>
-            </div>
+  <path id="mountains" fill="url(#peaks)"/>
+  <rect class="mist" x="-100" y="470" width="1800" height="120" fill="url(#fog)"/>
+  <path id="forest-far" fill="#2b3d4c"/>
+  <rect x="560" y="600" width="480" height="140" fill="url(#lake)"/>
+  <g id="shimmer" stroke="#ffe0b0" stroke-linecap="round"></g>
+  <rect class="mist" x="-100" y="570" width="1800" height="110" fill="url(#fog)" style="animation-duration:45s"/>
+  <path id="forest-mid" fill="#15252a"/>
+  <path id="forest-near" fill="#08120f"/>
+  <g id="reeds" fill="none" stroke="#040907" stroke-linecap="round"></g>
+</svg>
+<div class="veil"></div>
 
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">5</div>
-                <div class="item-content">
-                    <div class="item-name">Repurchase Confiscated Gun</div>
-                    <div class="item-description">Allows you to get your gun back without having to wait.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    40
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="consumable">
-                <div class="item-id">6</div>
-                <div class="item-content">
-                    <div class="item-name">Grease</div>
-                    <div class="item-description">Reduces the odds of jamming by 50% for 24h and protects from sand once.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    8
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="equipment">
-                <div class="item-id">7</div>
-                <div class="item-content">
-                    <div class="item-name">Sight</div>
-                    <div class="item-description">Improves accuracy for the next shot by (100 - current accuracy) / 3.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    6
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="equipment">
-                <div class="item-id">8</div>
-                <div class="item-content">
-                    <div class="item-name">Infrared Detector</div>
-                    <div class="item-description">Locks the trigger when there is no duck on sight, thus helping you to save bullets. Works for 24h, blocks 6 times.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    15
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="equipment">
-                <div class="item-id">9</div>
-                <div class="item-content">
-                    <div class="item-name">Silencer</div>
-                    <div class="item-description">Muffles most of the noise from your gun for 24h so ducks don't get frightened and escape.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    5
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="consumable">
-                <div class="item-id">10</div>
-                <div class="item-content">
-                    <div class="item-name">Four-leaf Clover</div>
-                    <div class="item-description">Win a random XP bonus for each duck you shoot for 24h. Bonus can be from 1 to 10 and is determined at purchase.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    13
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="equipment">
-                <div class="item-id">11</div>
-                <div class="item-content">
-                    <div class="item-name">Sunglasses</div>
-                    <div class="item-description">Protects from mirror induced glares for 24h.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    5
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">12</div>
-                <div class="item-content">
-                    <div class="item-name">Spare Clothes</div>
-                    <div class="item-description">Dry set of clothes. Useful when someone poured a bucket of water on you.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    7
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">13</div>
-                <div class="item-content">
-                    <div class="item-name">Brush for Gun</div>
-                    <div class="item-description">Cancels the sabotage and removes sand from your gun.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    7
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">14</div>
-                <div class="item-content">
-                    <div class="item-name">Mirror</div>
-                    <div class="item-description">Dazzles another player of your choice and make him lose 50% of his accuracy for his next shot.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    7
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">15</div>
-                <div class="item-content">
-                    <div class="item-name">Handful of Sand</div>
-                    <div class="item-description">Throw sand on the gun of another player of your choice, his jamming odds will increase by 50% for the next shot. Cancels effects from the grease.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    7
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">16</div>
-                <div class="item-content">
-                    <div class="item-name">Water Bucket</div>
-                    <div class="item-description">Throw a bucket of water on the hunter of your choice, forcing him to wait 1h for his clothes to dry before he can hunt again.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    10
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">17</div>
-                <div class="item-content">
-                    <div class="item-name">Sabotage</div>
-                    <div class="item-description">Sabotage the weapon of another player. His weapon will jam and explode at his face the next time he press the trigger.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    14
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="insurance">
-                <div class="item-id">18</div>
-                <div class="item-content">
-                    <div class="item-name">Life Insurance</div>
-                    <div class="item-description">Single use insurance policy allowing you to gain a bonus worth 2x the hunter level if you are the victim of a hunting accident for one week.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    10
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="insurance">
-                <div class="item-id">19</div>
-                <div class="item-content">
-                    <div class="item-name">Liability Insurance</div>
-                    <div class="item-description">Divides the XP penalty for hunting accidents by 3 for two days.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    5
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">20</div>
-                <div class="item-content">
-                    <div class="item-name">Decoy</div>
-                    <div class="item-description">Attracts a duck in the next 10 minutes.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    8
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="consumable">
-                <div class="item-id">21</div>
-                <div class="item-content">
-                    <div class="item-name">Piece of Bread</div>
-                    <div class="item-description">Throw pieces of bread to improve the probability of seeing ducks for 1h. Bread also makes ducks stay 20 seconds longer. Multiple pieces of bread can be bought to cumulate the effects.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    2
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="equipment">
-                <div class="item-id">22</div>
-                <div class="item-content">
-                    <div class="item-name">Ducks Detector</div>
-                    <div class="item-description">Single use device allowing a hunter to be warned by a notice when the next duck soars.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    5
-                </div>
-            </div>
-
-            <div class="shop-item" data-type="utility">
-                <div class="item-id">23</div>
-                <div class="item-content">
-                    <div class="item-name">Mechanical Duck</div>
-                    <div class="item-description">Make a prank to other hunters by launching a fake duck. They will not gain any XP from it and lose their ammo. The duck will be automatically launched 10 minutes after you buy it.</div>
-                </div>
-                <div class="xp-cost">
-                    <span class="xp-label">XP</span>
-                    50
-                </div>
-            </div>
-        </div>
-
-       <footer class="footer">
-    Duck Hunt v2.11 • ©2015-2016 Menz Agitat - Store Redesign in 2025 by <a href="https://github.com/DooubleTap" target="_blank">Seb.users.undernet.org</a> <br>
-    Duckhunt source code: <a href="https://github.com/theworm4002/IRC_DuckHunt" target="_blank">https://github.com/theworm4002/IRC_DuckHunt</a> <br>
-    This website source: <a href="https://github.com/DooubleTap/duckhunt" target="_blank">https://github.com/DooubleTap/duckhunt</a> <br>
-    mIRC and AdiIRC script: <a href="https://github.com/DooubleTap/duckhunt.mrc" target="_blank">https://github.com/DooubleTap/duckhunt.mrc</a> <br>
-</footer>
-
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="22" fill="none" stroke="#ff7a1a" stroke-width="3"/>
+        <path d="M32 4v14M32 46v14M4 32h14M46 32h14" stroke="#ff7a1a" stroke-width="3" stroke-linecap="round"/>
+        <g transform="translate(31 35) scale(0.95)" fill="#eef2ea">
+          <path d="M-13 -1 L-21 -4 L-19 1 L-13 2 Z"/>
+          <ellipse cx="0" cy="0" rx="14" ry="5"/>
+          <path d="M9 -2 Q14 -6 17 -6 L19 -4 Q14 -2 11 2 Z"/>
+          <circle cx="19" cy="-6" r="3.6"/>
+          <path d="M22 -6.6 L28 -5.2 L22 -4 Z" fill="#ff7a1a"/>
+          <path d="M-3 -2 Q3 -18 11 -22 Q7 -9 7 -2 Z"/>
+        </g>
+      </svg>
+      <div>
+        <h1>Duck <span>Hunt</span> Shop</h1>
+        <p class="tagline" data-i18n-html="tagline"></p>
+      </div>
     </div>
+    <div class="actions">
+      <a class="btn-canada" href="https://canada-undernet.github.io/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5l1.9 3.9 2.1-1.1-.6 4.6 2.6-2.4.7 2 3.3-.5-1 3.2 1.6.9-4.6 3.8.8 2.2-4.8-.8.2 5.2h-1.6l.2-5.2-4.8.8.8-2.2L1 11.1l1.6-.9-1-3.2 3.3.5.7-2 2.6 2.4-.6-4.6 2.1 1.1z"/></svg>
+        #canada <small>Undernet</small>
+      </a>
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="board">
+    <div class="filters" id="filters"></div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="c-num">#</th>
+            <th class="c-name" data-i18n="thItem"></th>
+            <th class="c-cat" data-i18n="thType"></th>
+            <th class="c-desc" data-i18n="thEffect"></th>
+            <th class="c-dur" data-i18n="thDuration"></th>
+            <th class="c-xp r">XP</th>
+          </tr>
+        </thead>
+        <tbody id="items"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    <span>Duck Hunt v2.11 · © 2015-2016 Menz Agitat · <span data-i18n="redesign"></span> <a href="https://github.com/DooubleTap" target="_blank" rel="noopener">Seb.users.undernet.org</a></span>
+    <nav>
+      <a href="https://github.com/theworm4002/IRC_DuckHunt" target="_blank" rel="noopener" data-i18n="srcGame"></a>
+      <a href="https://github.com/DooubleTap/duckhunt.mrc" target="_blank" rel="noopener" data-i18n="srcMirc"></a>
+      <a href="https://github.com/DooubleTap/duckhunt" target="_blank" rel="noopener" data-i18n="srcSite"></a>
+      <span data-i18n="privacy"></span>
+    </nav>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ---------- Shop data (order = # used by !shop) ----------
+const CATS = {
+  ammo:      { c: "var(--orange)", fr: "Munition",   en: "Ammo" },
+  gear:      { c: "var(--blue)",   fr: "Équipement", en: "Gear" },
+  boost:     { c: "var(--green)",  fr: "Bonus",      en: "Boost" },
+  care:      { c: "var(--khaki)",  fr: "Entretien",  en: "Upkeep" },
+  prank:     { c: "var(--red)",    fr: "Coup bas",   en: "Prank" },
+  insurance: { c: "var(--steel)",  fr: "Assurance",  en: "Insurance" }
+};
+
+const ITEMS = [
+  { cat: "ammo", xp: 7,  fr: ["Balle supplémentaire", "Une balle ajoutée directement dans la chambre.", "—"],
+                         en: ["Extra Bullet", "One bullet added straight into the chamber.", "—"] },
+  { cat: "ammo", xp: 20, fr: ["Chargeur supplémentaire", "Un chargeur ajouté à ta réserve.", "—"],
+                         en: ["Extra Clip", "One clip added to your stock.", "—"] },
+  { cat: "ammo", xp: 15, fr: ["Munitions perforantes", "Dégâts ×2. Aide contre les canards dorés.", "24 h"],
+                         en: ["AP Ammo", "Damage ×2. Helps against golden ducks.", "24 h"] },
+  { cat: "ammo", xp: 25, fr: ["Munitions explosives", "Dégâts ×3. Aide contre les canards dorés.", "24 h"],
+                         en: ["Explosive Ammo", "Damage ×3. Helps against golden ducks.", "24 h"] },
+  { cat: "care", xp: 40, fr: ["Racheter l'arme confisquée", "Récupère ton arme sans attendre.", "—"],
+                         en: ["Buy Back Confiscated Gun", "Get your gun back without waiting.", "—"] },
+  { cat: "boost", xp: 8, fr: ["Graisse", "Enrayage −50 % et protège du sable une fois.", "24 h"],
+                         en: ["Grease", "Jamming odds −50%, protects from sand once.", "24 h"] },
+  { cat: "gear", xp: 6,  fr: ["Lunette de visée", "Précision + (100 − précision) / 3.", "1 tir"],
+                         en: ["Sight", "Accuracy + (100 − accuracy) / 3.", "1 shot"] },
+  { cat: "gear", xp: 15, fr: ["Détecteur infrarouge", "Bloque la gâchette sans canard en vue. 6 blocages.", "24 h"],
+                         en: ["Infrared Detector", "Locks the trigger when no duck is around. Blocks 6×.", "24 h"] },
+  { cat: "gear", xp: 5,  fr: ["Silencieux", "Le bruit du tir n'effraie plus les canards.", "24 h"],
+                         en: ["Silencer", "Gun noise no longer scares ducks away.", "24 h"] },
+  { cat: "boost", xp: 13, fr: ["Trèfle à quatre feuilles", "+1 à +10 XP par canard (tiré à l'achat).", "24 h"],
+                          en: ["Four-leaf Clover", "+1 to +10 XP per duck (rolled at purchase).", "24 h"] },
+  { cat: "gear", xp: 5,  fr: ["Lunettes de soleil", "Protège de l'éblouissement des miroirs.", "24 h"],
+                         en: ["Sunglasses", "Protects from mirror glare.", "24 h"] },
+  { cat: "care", xp: 7,  fr: ["Vêtements de rechange", "Te sèche après un seau d'eau.", "—"],
+                         en: ["Spare Clothes", "Dry off after a water bucket.", "—"] },
+  { cat: "care", xp: 7,  fr: ["Brosse pour arme", "Annule un sabotage et retire le sable.", "—"],
+                         en: ["Gun Brush", "Cancels sabotage and removes sand.", "—"] },
+  { cat: "prank", xp: 7, fr: ["Miroir", "Éblouit un joueur : −50 % de précision.", "1 tir"],
+                         en: ["Mirror", "Dazzles a player: −50% accuracy.", "1 shot"] },
+  { cat: "prank", xp: 7, fr: ["Poignée de sable", "Enrayage +50 % pour un joueur. Annule sa graisse.", "1 tir"],
+                         en: ["Handful of Sand", "+50% jamming for a player. Cancels grease.", "1 shot"] },
+  { cat: "prank", xp: 10, fr: ["Seau d'eau", "Trempe un chasseur : il ne peut plus chasser.", "1 h"],
+                          en: ["Water Bucket", "Soaks a hunter: no hunting until dry.", "1 h"] },
+  { cat: "prank", xp: 14, fr: ["Sabotage", "L'arme d'un joueur lui explose au visage.", "1 tir"],
+                          en: ["Sabotage", "A player's gun jams and blows up in their face.", "1 shot"] },
+  { cat: "insurance", xp: 10, fr: ["Assurance vie", "Victime d'un accident : bonus de 2× ton niveau. 1 usage.", "1 sem."],
+                              en: ["Life Insurance", "Accident victim: bonus of 2× your level. Single use.", "1 week"] },
+  { cat: "insurance", xp: 5,  fr: ["Assurance responsabilité", "Pénalité XP des accidents de chasse ÷ 3.", "2 jours"],
+                              en: ["Liability Insurance", "Hunting accident XP penalty ÷ 3.", "2 days"] },
+  { cat: "boost", xp: 8, fr: ["Appelant", "Attire un canard d'ici 10 minutes.", "10 min"],
+                         en: ["Decoy", "Attracts a duck within 10 minutes.", "10 min"] },
+  { cat: "boost", xp: 2, fr: ["Morceau de pain", "Plus de canards, qui restent 20 s de plus. Cumulable.", "1 h"],
+                         en: ["Piece of Bread", "More ducks, staying 20 s longer. Stackable.", "1 h"] },
+  { cat: "gear", xp: 5,  fr: ["Détecteur de canards", "Une notice t'avertit quand le prochain canard s'envole.", "1 usage"],
+                         en: ["Ducks Detector", "A notice warns you when the next duck soars.", "Single use"] },
+  { cat: "prank", xp: 50, fr: ["Canard mécanique", "Faux canard lancé 10 min après l'achat : 0 XP, balles perdues.", "+10 min"],
+                          en: ["Mechanical Duck", "Fake duck launched 10 min after purchase: 0 XP, wasted ammo.", "+10 min"] }
+];
+
+const TEXT = {
+  fr: {
+    tagline: "Tape <code>!shop &lt;#&gt;</code> dans le canal pour acheter. Le jeu se joue surtout sur <strong>#canada</strong>.",
+    thItem: "Objet", thType: "Type", thEffect: "Effet", thDuration: "Durée",
+    all: "Tout", hint: "Clique une ligne pour copier la commande",
+    copied: "Copié :", redesign: "Refonte 2025 par",
+    srcGame: "Code du jeu", srcMirc: "Script mIRC / AdiIRC", srcSite: "Code du site",
+    privacy: "Aucun témoin, aucun traceur."
+  },
+  en: {
+    tagline: "Type <code>!shop &lt;#&gt;</code> in the channel to buy. The game is mostly played on <strong>#canada</strong>.",
+    thItem: "Item", thType: "Type", thEffect: "Effect", thDuration: "Duration",
+    all: "All", hint: "Click a row to copy the command",
+    copied: "Copied:", redesign: "2025 redesign by",
+    srcGame: "Game source", srcMirc: "mIRC / AdiIRC script", srcSite: "Site source",
+    privacy: "No cookies, no tracking."
+  }
+};
+
+// ---------- Rendering ----------
+let lang = "fr";
+let filter = null;
+const $ = (s, r = document) => r.querySelector(s);
+
+function render() {
+  const t = TEXT[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
+  document.querySelectorAll("[data-i18n-html]").forEach(el => el.innerHTML = t[el.dataset.i18nHtml]);
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+
+  $("#items").innerHTML = ITEMS.map((it, i) => {
+    const [name, desc, dur] = it[lang];
+    const cat = CATS[it.cat];
+    return `<tr data-n="${i + 1}" data-cat="${it.cat}" style="--c:${cat.c}"${filter && filter !== it.cat ? ' class="hidden"' : ""}>
+      <td class="c-num"><span class="num">${i + 1}</span></td>
+      <td class="c-name name">${name}</td>
+      <td class="c-cat cat">${cat[lang]}</td>
+      <td class="c-desc desc">${desc}</td>
+      <td class="c-dur dur">${dur === "—" && innerWidth <= 820 ? "" : dur}</td>
+      <td class="c-xp xp">${it.xp}<small>xp</small></td>
+    </tr>`;
+  }).join("");
+
+  $("#filters").innerHTML =
+    `<button type="button" class="chip all" aria-pressed="${!filter}" data-cat="">${t.all}</button>` +
+    Object.entries(CATS).map(([k, c]) =>
+      `<button type="button" class="chip" style="--c:${c.c}" aria-pressed="${filter === k}" data-cat="${k}">${c[lang]}</button>`
+    ).join("") +
+    `<span class="hint">${t.hint}</span>`;
+}
+
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("dh-lang", l); } catch (e) {}
+  render();
+}
+
+$("#filters").addEventListener("click", e => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  filter = b.dataset.cat && filter !== b.dataset.cat ? b.dataset.cat : null;
+  render();
+});
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+let toastTimer;
+$("#items").addEventListener("click", e => {
+  const row = e.target.closest("tr");
+  if (!row) return;
+  const cmd = "!shop " + row.dataset.n;
+  const show = () => {
+    const toast = $("#toast");
+    toast.innerHTML = `${TEXT[lang].copied} <code>${cmd}</code>`;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 1600);
+  };
+  if (navigator.clipboard) navigator.clipboard.writeText(cmd).then(show, () => {});
+});
+
+let saved = null;
+try { saved = localStorage.getItem("dh-lang"); } catch (e) {}
+lang = saved || ((navigator.language || "fr").toLowerCase().startsWith("fr") ? "fr" : "en");
+render();
+let resizeTimer;
+addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(render, 150); });
+
+// ---------- Procedural valley ----------
+(function scene() {
+  let seed = 20251004;
+  const rnd = () => {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+  const W = 1600, H = 900, CX = 800;
+  const f = n => n.toFixed(1);
+
+  // Valley-shaped ridge: low in the middle, rising toward both edges
+  const ridge = (base, depth, amp, phase) => x =>
+    base - depth * Math.pow(Math.abs(x - CX) / CX, 1.5)
+    + amp * (Math.sin(x / 97 + phase) * 0.6 + Math.sin(x / 41 + phase * 2) * 0.3 + Math.sin(x / 13 + phase) * 0.1);
+
+  function ground(y) {
+    let d = `M0 ${H} L0 ${f(y(0))}`;
+    for (let x = 10; x <= W; x += 10) d += ` L${x} ${f(y(x))}`;
+    return d + ` L${W} ${H} Z`;
+  }
+  function pine(x, y, h) {
+    const w = h * 0.4;
+    const pts = [[0, -1], [.3, -.64], [.14, -.62], [.42, -.34], [.22, -.32], [.52, -.06], [.07, -.06], [.07, .04]];
+    const right = pts.map(([px, py]) => `${f(x + px * w)} ${f(y + py * h)}`);
+    const left = pts.slice(1).reverse().map(([px, py]) => `${f(x - px * w)} ${f(y + py * h)}`);
+    return `M${right.join(" L")} L${left.join(" L")} Z`;
+  }
+  function forest(id, y, spacing, hMin, hMax) {
+    let d = ground(y);
+    for (let x = -10; x < W + 10; x += spacing * (0.5 + rnd())) {
+      const h = hMin + (hMax - hMin) * rnd();
+      d += pine(x, y(x) + 3, h);
+    }
+    document.getElementById(id).setAttribute("d", d);
+  }
+
+  // Jagged far mountains
+  let m = `M0 ${H}`;
+  for (let x = 0; x <= W; x += 8) {
+    const y = 470 - 260 * Math.pow(Math.abs(x - CX) / CX, 1.1)
+      + 40 * Math.sin(x / 70) + 25 * Math.sin(x / 23 + 1) + 8 * (rnd() - 0.5);
+    m += ` L${x} ${f(y)}`;
+  }
+  document.getElementById("mountains").setAttribute("d", m + ` L${W} ${H} Z`);
+
+  forest("forest-far", ridge(585, 230, 14, 0.5), 7, 14, 26);
+  forest("forest-mid", ridge(700, 330, 22, 2.1), 13, 30, 58);
+  forest("forest-near", ridge(905, 560, 30, 4.2), 26, 80, 150);
+
+  // Stars
+  let stars = "";
+  for (let i = 0; i < 90; i++) {
+    stars += `<circle cx="${f(rnd() * W)}" cy="${f(rnd() * 280)}" r="${f(0.4 + rnd() * 1.1)}" opacity="${f(0.15 + rnd() * 0.6)}"/>`;
+  }
+  document.getElementById("stars").innerHTML = stars;
+
+  // Sun glints on the lake
+  let glints = "";
+  for (let i = 0; i < 26; i++) {
+    const y = 606 + i * 4.5, w = 70 - i * 2.2 + rnd() * 30, x = CX - w / 2 + (rnd() - 0.5) * 30;
+    glints += `<line x1="${f(x)}" y1="${f(y)}" x2="${f(x + w)}" y2="${f(y)}" stroke-width="${f(1.6 - i * 0.04)}" opacity="${f(0.55 - i * 0.018)}"/>`;
+  }
+  document.getElementById("shimmer").innerHTML = glints;
+
+  // Cattails and reeds in the foreground
+  let reeds = "";
+  const clump = (cx, n, spread) => {
+    for (let i = 0; i < n; i++) {
+      const x = cx + (rnd() - 0.5) * spread, h = 90 + rnd() * 170, lean = (rnd() - 0.5) * 50;
+      reeds += `<path d="M${f(x)} ${H} Q${f(x + lean * 0.3)} ${f(H - h * 0.6)} ${f(x + lean)} ${f(H - h)}" stroke-width="${f(2 + rnd() * 2)}"/>`;
+      if (rnd() < 0.35) {
+        const tx = x + lean, ty = H - h;
+        reeds += `<path d="M${f(tx)} ${f(ty + 4)} L${f(tx + lean * 0.06)} ${f(ty - 26)}" stroke-width="7"/>`;
+      }
+    }
+  };
+  clump(90, 26, 200); clump(330, 10, 120); clump(1280, 12, 140); clump(1510, 28, 220);
+  document.getElementById("reeds").innerHTML = reeds;
+})();
+</script>
 </body>
 </html>
